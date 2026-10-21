@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novasearch - General & Inställningscentral</title>
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --accent-blue: #1a73e8;
+            --accent-blue-hover: #1557b0;
+            --accent-red: #ea4335;
+            --border-color: #dadce0;
+            --header-bg: #ffffff;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --radius: 12px;
+        }
+
+        body.dark-theme {
+            --bg-primary: #171717;
+            --bg-card: #242424;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent-blue: #8ab4f8;
+            --accent-blue-hover: #aecbfa;
+            --accent-red: #f28b82;
+            --border-color: #3c4043;
+            --header-bg: #202124;
+            --shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .brand-logo span {
+            color: var(--accent-red);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        nav a:hover {
+            background-color: rgba(0,0,0,0.04);
+            color: var(--text-primary);
+        }
+
+        body.dark-theme nav a:hover {
+            background-color: rgba(255,255,255,0.06);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 24px;
+            flex: 1;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 32px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+
+        .sidebar-btn:hover {
+            background-color: rgba(0,0,0,0.04);
+            color: var(--text-primary);
+        }
+
+        body.dark-theme .sidebar-btn:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .sidebar-btn.active {
+            background-color: rgba(26, 115, 232, 0.12);
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: -12px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group .description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: -4px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .switch-container:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-blue);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Uppladdningszon */
+        .dropzone {
+            border: 2px dashed var(--accent-blue);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: rgba(26, 115, 232, 0.03);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dropzone:hover {
+            background-color: rgba(26, 115, 232, 0.08);
+        }
+
+        .dropzone input[type="file"] {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .dropzone-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: var(--accent-blue);
+        }
+
+        .dropzone-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .dropzone-subtext {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 1;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-status-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            background-color: rgba(26, 115, 232, 0.08);
+            border-left: 4px solid var(--accent-blue);
+            display: none;
+        }
+
+        .ai-status-box.active {
+            display: block;
+        }
+
+        /* Rapportering */
+        .report-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .report-chip {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .report-chip:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .report-chip.selected {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-blue-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        /* Loggar / Historik */
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .log-table th, .log-table td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .log-table th {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: #ceead6; color: #0d652d; }
+        .badge-pending { background: #feefc3; color: #b06000; }
+        .badge-danger { background: #fad2cf; color: #c5221f; }
+
+        body.dark-theme .badge-success { background: #0d652d; color: #ceead6; }
+        body.dark-theme .badge-pending { background: #b06000; color: #feefc3; }
+        body.dark-theme .badge-danger { background: #c5221f; color: #fad2cf; }
+
+        footer {
+            background-color: var(--header-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 24px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            .sidebar-btn {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="brand-logo">Nova<span>search</span></a>
+        <nav>
+            <a href="index.html">Sök</a>
+            <a href="bilder.html">Bilder</a>
+            <a href="about.html">Om</a>
+            <a href="login.html">Logga in</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- SIDOMENY -->
+        <aside class="sidebar">
+            <button class="sidebar-btn active" onclick="scrollToSection('sec-general')">
+                ⚙️ Generellt
+            </button>
+            <button class="sidebar-btn" onclick="scrollToSection('sec-ai-images')">
+                🖼️ AI & Bildfiler
+            </button>
+            <button class="sidebar-btn" onclick="scrollToSection('sec-security')">
+                🛡️ Säkerhet & Filter
+            </button>
+            <button class="sidebar-btn" onclick="scrollToSection('sec-report')">
+                🚨 Rapportering
+            </button>
+            <button class="sidebar-btn" onclick="scrollToSection('sec-logs')">
+                📋 Ärendelogg
+            </button>
+        </aside>
+
+        <!-- HUVUDINNEHÅLL -->
+        <main class="main-content">
+
+            <!-- SEKTION 1: GENERELLA INSTÄLLNINGAR -->
+            <section id="sec-general" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚙️ Generella Inställningar</h2>
+                    <span id="saveIndicator" style="font-size: 12px; color: var(--accent-blue); display: none;">Sparat!</span>
+                </div>
+                <p class="card-subtitle">Anpassa sökmotorns visuella tema, språkpreferenser och prestanda.</p>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="themeSelect">Visningsläge</label>
+                        <select id="themeSelect" onchange="updateTheme()">
+                            <option value="light">Ljust läge</option>
+                            <option value="dark">Mörkt läge</option>
+                            <option value="system">Följ systemets inställning</option>
+                        </select>
+                        <span class="description">Välj hur gränssnittet visas för dig.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="langSelect">Språk & Region</label>
+                        <select id="langSelect" onchange="updateLanguage()">
+                            <option value="auto">Automatisk IP-avkänning (Rekommenderad)</option>
+                            <option value="sv">Svenska (Sverige)</option>
+                            <option value="en">English (US)</option>
+                            <option value="es">Español</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                        <span class="description">Anpassar sökresultat och menyer.</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <div class="switch-container">
+                        <div>
+                            <strong>Autokorrigering av sökfrågor</strong>
+                            <div class="description">Rätta automatiskt uppenbara stavfel i sökrutan.</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoCorrect" checked onchange="autoSave()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="switch-container">
+                        <div>
+                            <strong>Öppna länkar i ny flik</strong>
+                            <div class="description">Externa sökresultat öppnas i ett nytt webbläsarfönster.</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="openNewTab" onchange="autoSave()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="switch-container">
+                        <div>
+                            <strong>Snabbstarts-cache</strong>
+                            <div class="description">Ladda i förväg populära sökresultat för snabbare svarstider.</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="fastCache" checked onchange="autoSave()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEKTION 2: AI & BILDUPPLADDNING -->
+            <section id="sec-ai-images" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🖼️ Nova AI Bildanalys & Filhantering</h2>
+                </div>
+                <p class="card-subtitle">Ladda upp bildfiler för multimodal AI-analys eller ställ in regler för bildbehandling.</p>
+
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(this.files)">
+                    <div class="dropzone-icon">📷</div>
+                    <div class="dropzone-text">Dra och släpp bildfiler här eller klicka för att bläddra</div>
+                    <div class="dropzone-subtext">Stödjer PNG, JPG, WEBP och GIF upp till 25MB per fil</div>
+                </div>
+
+                <div class="preview-grid" id="previewGrid"></div>
+
+                <div class="ai-status-box" id="aiStatus">
+                    <strong>🤖 Nova AI Status:</strong> <span id="aiStatusText">Analyserar bifogade filer...</span>
+                    <div style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);" id="aiDetails"></div>
+                </div>
+
+                <div class="form-grid" style="margin-top: 24px;">
+                    <div class="form-group">
+                        <label for="aiModel">AI-modell för bildtolkning</label>
+                        <select id="aiModel" onchange="autoSave()">
+                            <option value="nova-vision-v2">Nova Vision 2.0 (Standard)</option>
+                            <option value="nova-vision-fast">Nova Vision Flash (Snabbare)</option>
+                            <option value="nova-pro">Nova Pro Multimodal (Högsta precision)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ocrLang">OCR-Textigenkänning</label>
+                        <select id="ocrLang" onchange="autoSave()">
+                            <option value="auto">Automatisk språkdetektering i bild</option>
+                            <option value="sv">Svenska textkällor</option>
+                            <option value="en">Engelska textkällor</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEKTION 3: SÄKERHET & FILTER -->
+            <section id="sec-security" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🛡️ Säkerhet & Innehållsfilter</h2>
+                </div>
+                <p class="card-subtitle">Skydda din sökupplevelse med Novasearch avancerade säkerhetsprotokoll.</p>
+
+                <div class="form-group">
+                    <label for="safeSearchLevel">SafeSearch Innehållsfilter</label>
+                    <select id="safeSearchLevel" onchange="autoSave()">
+                        <option value="strict">Strikt - Blockera olämpligt innehåll, våld och skadligt material</option>
+                        <option value="moderate">Måttlig - Filtrera explicita bilder men tillåt textresultat</option>
+                        <option value="off">Av - Inga innehållsbegränsningar</option>
+                    </select>
+                </div>
+
+                <div class="switch-container">
+                    <div>
+                        <strong>Spårningsskydd (Anti-Tracker)</strong>
+                        <div class="description">Blockera dolda spårningsskript på webbplatser du besöker via sök.</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="antiTracker" checked onchange="autoSave()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-container">
+                    <div>
+                        <strong>HTTPS-Tvingande</strong>
+                        <div class="description">Varna och omdirigera alltid till säkra krypterade anslutningar.</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="forceHttps" checked onchange="autoSave()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="blockedDomains">Blockerade Domäner</label>
+                    <textarea id="blockedDomains" rows="3" placeholder="Ange domäner att exkludera från sökresultat (t.ex. spam-site.com, example.org)" onchange="autoSave()"></textarea>
+                </div>
+            </section>
+
+            <!-- SEKTION 4: RAPPORTERINGSSYSTEM -->
+            <section id="sec-report" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🚨 Rapporteringscentral</h2>
+                </div>
+                <p class="card-subtitle">Skicka in rapporter om felaktiga sökresultat, olämpligt innehåll eller tekniska buggar.</p>
+
+                <form id="reportForm" onsubmit="submitReport(event)">
+                    <label style="font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block;">Välj rapportkategori</label>
+                    <div class="report-type-selector">
+                        <div class="report-chip selected" onclick="selectReportCategory(this, 'bug')">🐛 Tekniskt fel</div>
+                        <div class="report-chip" onclick="selectReportCategory(this, 'inappropriate')">🔞 Olämpligt innehåll</div>
+                        <div class="report-chip" onclick="selectReportCategory(this, 'ai_error')">🤖 AI-hallucination</div>
+                        <div class="report-chip" onclick="selectReportCategory(this, 'copyright')">⚖️ Upphovsrätt</div>
+                    </div>
+
+                    <input type="hidden" id="selectedCategory" value="bug">
+
+                    <div class="form-group">
+                        <label for="reportTarget">Sökfråga eller URL som berörs</label>
+                        <input type="text" id="reportTarget" placeholder="https://eller sökord som gav felaktigt resultat" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportDescription">Detaljerad beskrivning</label>
+                        <textarea id="reportDescription" rows="4" placeholder="Förklara så noggrant som möjligt vad som gick snett..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reporterEmail">Din e-postadress (Valfritt, för återkoppling)</label>
+                        <input type="text" id="reporterEmail" placeholder="namn@doman.se">
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 12px;">
+                        <button type="submit" class="btn btn-primary">Skicka Rapport</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetReportForm()">Rensa</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- SEKTION 5: ÄRENDELOGG -->
+            <section id="sec-logs" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📋 Ärendelogg & Rapporthistorik</h2>
+                </div>
+                <p class="card-subtitle">Status på dina tidigare inskickade rapporter och systemmeddelanden.</p>
+
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Typ</th>
+                            <th>Mål</th>
+                            <th>Datum</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody">
+                        <tr>
+                            <td>#NOV-8921</td>
+                            <td>Bugg</td>
+                            <td>Bildsökning laddar inte</td>
+                            <td>2026-10-20</td>
+                            <td><span class="badge badge-success">Löst</span></td>
+                        </tr>
+                        <tr>
+                            <td>#NOV-8704</td>
+                            <td>AI-Svar</td>
+                            <td>Kalkylering av statistik</td>
+                            <td>2026-10-18</td>
+                            <td><span class="badge badge-pending">Under granskning</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; Novasearch Engine Project. Alla inställningar lagras lokalt i din webbläsare.
+    </footer>
+
+    <script>
+        // Global tillståndshantering
+        const state = {
+            uploadedFiles: [],
+            settings: {
+                theme: 'light',
+                lang: 'auto',
+                autoCorrect: true,
+                openNewTab: false,
+                fastCache: true,
+                aiModel: 'nova-vision-v2',
+                ocrLang: 'auto',
+                safeSearch: 'strict',
+                antiTracker: true,
+                forceHttps: true,
+                blockedDomains: ''
+            }
+        };
+
+        // Navigering i sidomenyn
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Temahantering
+        function updateTheme() {
+            const val = document.getElementById('themeSelect').value;
+            state.settings.theme = val;
+            
+            if (val === 'dark' || (val === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+            autoSave();
+        }
+
+        function updateLanguage() {
+            state.settings.lang = document.getElementById('langSelect').value;
+            autoSave();
+        }
+
+        // Autolagring med indikation
+        function autoSave() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.style.display = 'inline';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 1500);
+        }
+
+        // Bilduppladdning & preview
+        function handleFiles(files) {
+            const previewGrid = document.getElementById('previewGrid');
+            const aiStatus = document.getElementById('aiStatus');
+            const aiStatusText = document.getElementById('aiStatusText');
+            const aiDetails = document.getElementById('aiDetails');
+
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                
+                state.uploadedFiles.push(file);
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement('div');
+                    item.className = 'preview-item';
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button class="preview-remove" onclick="removeFile(this, '${file.name}')">&times;</button>
+                    `;
+                    previewGrid.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            if (state.uploadedFiles.length > 0) {
+                aiStatus.classList.add('active');
+                aiStatusText.innerText = `Analyserar ${state.uploadedFiles.length} fil(er) med Nova AI...`;
+                aiDetails.innerText = 'Extraherar metadata, identifierar objekt och förbereder kontext.';
+                
+                setTimeout(() => {
+                    aiStatusText.innerText = `Analys klar för ${state.uploadedFiles.length} fil(er)!`;
+                    aiDetails.innerText = 'Bilderna är klara att användas i din nästa AI-sökning.';
+                }, 1800);
+            }
+        }
+
+        function removeFile(btn, filename) {
+            btn.parentElement.remove();
+            state.uploadedFiles = state.uploadedFiles.filter(f => f.name !== filename);
+            if (state.uploadedFiles.length === 0) {
+                document.getElementById('aiStatus').classList.remove('active');
+            }
+        }
+
+        // Rapporteringskategorier
+        function selectReportCategory(element, cat) {
+            document.querySelectorAll('.report-chip').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('selectedCategory').value = cat;
+        }
+
+        function submitReport(e) {
+            e.preventDefault();
+            const cat = document.getElementById('selectedCategory').value;
+            const target = document.getElementById('reportTarget').value;
+            const desc = document.getElementById('reportDescription').value;
+
+            const randomId = '#NOV-' + Math.floor(1000 + Math.random() * 9000);
+            const dateStr = new Date().toISOString().split('T')[0];
+
+            const tbody = document.getElementById('logTableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${randomId}</td>
+                <td>${cat}</td>
+                <td>${target.substring(0, 30)}${target.length > 30 ? '...' : ''}</td>
+                <td>${dateStr}</td>
+                <td><span class="badge badge-pending">Mottagen</span></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+
+            alert('Tack! Din rapport har registrerats med ID ' + randomId);
+            resetReportForm();
+        }
+
+        function resetReportForm() {
+            document.getElementById('reportForm').reset();
+            document.querySelectorAll('.report-chip').forEach(c => c.classList.remove('selected'));
+            document.querySelector('.report-chip').classList.add('selected');
+            document.getElementById('selectedCategory').value = 'bug';
+        }
+
+        // Drag & Drop funktioner
+        const dropzone = document.getElementById('dropzone');
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = 'rgba(26, 115, 232, 0.15)';
+        });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.backgroundColor = 'rgba(26, 115, 232, 0.03)';
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = 'rgba(26, 115, 232, 0.03)';
+            handleFiles(e.dataTransfer.files);
+        });
+    </script>
+</body>
+</html>
