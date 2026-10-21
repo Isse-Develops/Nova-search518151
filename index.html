@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novasearch - Sök & AI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #ffffff;
+            color: #202124;
+        }
+
+        /* Top navigation header */
+        header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 24px;
+            gap: 16px;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            background-color: #1a73e8;
+            color: #ffffff !important;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .login-btn:hover {
+            background-color: #1557b0;
+        }
+
+        /* Main search area */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: -40px;
+        }
+
+        .brand-logo {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+            color: #1a73e8;
+            user-select: none;
+        }
+
+        .brand-logo span {
+            color: #ea4335;
+        }
+
+        .search-box-container {
+            width: 100%;
+            max-width: 584px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 46px;
+            padding: 0 45px 0 45px;
+            font-size: 16px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.1);
+            transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        .search-input:hover, .search-input:focus {
+            box-shadow: 0 1px 8px rgba(32, 33, 36, 0.24);
+            border-color: rgba(223, 225, 229, 0);
+        }
+
+        .icon-search {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: #9aa0a6;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Toggle AI Mode */
+        .ai-mode-wrapper {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #3c4043;
+            background-color: #f8f9fa;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #dadce0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ai-mode-wrapper input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .button-group {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: #f8f9fa;
+            border: 1px solid #f8f9fa;
+            border-radius: 4px;
+            color: #3c4043;
+            font-size: 14px;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .btn:hover {
+            border-color: #dadce0;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            color: #202124;
+        }
+
+        /* Results view box */
+        .results-box {
+            display: none;
+            width: 100%;
+            max-width: 584px;
+            margin-top: 25px;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        .results-box h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #1a0dab;
+        }
+
+        .results-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #4d5156;
+        }
+
+        .blocked-message {
+            color: #d93025;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #f2f2f2;
+            color: #70757a;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-location {
+            padding: 12px 24px;
+            border-bottom: 1px solid #dadce0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-links div {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #70757a;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <a href="bilder.html" id="navBilder">Bilder</a>
+        <a href="om.html" id="navOm">Om Novasearch</a>
+        <a href="login.html" class="login-btn" id="navLogin">Logga in</a>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="brand-logo">Nova<span>search</span></div>
+
+        <div class="search-box-container">
+            <svg class="icon-search" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Sök på Novasearch eller fråga Nova AI..." autofocus>
+        </div>
+
+        <!-- AI Mode Checkbox -->
+        <label class="ai-mode-wrapper">
+            <input type="checkbox" id="aiToggle">
+            <span id="aiLabelText"><strong>Nova AI-läge</strong> (Generera svar med innehållsfilter)</span>
+        </label>
+
+        <!-- Search Action Buttons -->
+        <div class="button-group">
+            <button class="btn" onclick="executeSearch()">Sök på Novasearch</button>
+            <button class="btn" onclick="randomSearch()">Jag har tur</button>
+        </div>
+
+        <!-- Output Box for Results -->
+        <div id="resultsOutput" class="results-box">
+            <h3 id="resultTitle">Resultat</h3>
+            <p id="resultContent"></p>
+        </div>
+    </main>
+
+    <!-- Footer Area -->
+    <footer>
+        <div class="footer-location">Sverige</div>
+        <div class="footer-links">
+            <div>
+                <a href="om.html">Om Novasearch</a>
+                <a href="integritet.html">Integritet</a>
+            </div>
+            <div>
+                <a href="villkor.html">Villkor</a>
+                <a href="installningar.html">Inställningar</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Komplett ordlista för länder och språk över hela världen
+        const translations = {
+            "SE": { placeholder: "Sök på Novasearch eller fråga Nova AI...", searchBtn: "Sök på Novasearch", luckyBtn: "Jag har tur", aiText: "Nova AI-läge (Säkra svar)", bilder: "Bilder", om: "Om Novasearch", login: "Logga in" },
+            "FI": { placeholder: "Hae Novasearchista tai kysy Nova AI:lta...", searchBtn: "Hae Novasearchista", luckyBtn: "Olen onnekas", aiText: "Nova AI -tila", bilder: "Kuvat", om: "Tietoja", login: "Kirjaudu" },
+            "RU": { placeholder: "Искать в Novasearch или спросить Nova AI...", searchBtn: "Поиск в Novasearch", luckyBtn: "Мне повезёт!", aiText: "Режим Nova AI", bilder: "Картинки", om: "О нас", login: "Войти" },
+            "ES": { placeholder: "Buscar en Novasearch o preguntar a Nova AI...", searchBtn: "Buscar con Novasearch", luckyBtn: "Voy a tener suerte", aiText: "Modo Nova AI", bilder: "Imágenes", om: "Acerca de", login: "Iniciar sesión" },
+            "MX": { placeholder: "Buscar en Novasearch o preguntar a Nova AI...", searchBtn: "Buscar con Novasearch", luckyBtn: "Voy a tener suerte", aiText: "Modo Nova AI", bilder: "Imágenes", om: "Acerca de", login: "Iniciar sesión" },
+            "AL": { placeholder: "Kërko në Novasearch ose pyet Nova AI...", searchBtn: "Kërko me Novasearch", luckyBtn: "Jam me fat", aiText: "Modaliteti Nova AI", bilder: "Foto", om: "Rreth", login: "Identifikohu" },
+            "DE": { placeholder: "Auf Novasearch suchen oder Nova AI fragen...", searchBtn: "Novasearch-Suche", luckyBtn: "Auf gut Glück!", aiText: "Nova AI-Modus", bilder: "Bilder", om: "Über", login: "Anmelden" },
+            "FR": { placeholder: "Rechercher sur Novasearch ou demander à Nova AI...", searchBtn: "Recherche Novasearch", luckyBtn: "J'ai de la chance", aiText: "Mode Nova AI", bilder: "Images", om: "À propos", login: "Connexion" },
+            "BR": { placeholder: "Pesquisar no Novasearch ou perguntar ao Nova AI...", searchBtn: "Pesquisa Novasearch", luckyBtn: "Estou com sorte", aiText: "Modo Nova AI", bilder: "Imagens", om: "Sobre", login: "Entrar" },
+            "IT": { placeholder: "Cerca su Novasearch o chiedi a Nova AI...", searchBtn: "Cerca con Novasearch", luckyBtn: "Mi sento fortunato", aiText: "Modalità Nova AI", bilder: "Immagini", om: "Informazioni", login: "Accedi" },
+            "CN": { placeholder: "在 Novasearch 中搜索或询问 Nova AI...", searchBtn: "Novasearch 搜索", luckyBtn: "手气不错", aiText: "Nova AI 模式", bilder: "图片", om: "关于", login: "登录" },
+            "JP": { placeholder: "Novasearch で検索または Nova AI に質問...", searchBtn: "Novasearch 検索", luckyBtn: "I'm Feeling Lucky", aiText: "Nova AI モード", bilder: "画像", om: "概要", login: "ログイン" },
+            "SA": { placeholder: "ابحث في Novasearch أو اسأل Nova AI...", searchBtn: "بحث Novasearch", luckyBtn: "إني محظوظ", aiText: "وضع Nova AI", bilder: "صور", om: "معلومات", login: "تسجيل الدخول" },
+            "default": { placeholder: "Search Novasearch or ask Nova AI...", searchBtn: "Novasearch Search", luckyBtn: "I'm Feeling Lucky", aiText: "Nova AI Mode (Safe answers)", bilder: "Images", om: "About Novasearch", login: "Sign in" }
+        };
+
+        // Säkerhetsfilter: Lista på ord som blockeras för att skydda användare
+        const blockedKeywords = ["våld", "vapen", "droger", "hat", "olagligt", "hacka", "violence", "weapons", "drugs"];
+
+        // Funktion för att köra sökning och säkerhetskontroll
+        function executeSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const isAiMode = document.getElementById('aiToggle').checked;
+            const resultsBox = document.getElementById('resultsOutput');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultContent = document.getElementById('resultContent');
+
+            if (!query) {
+                alert("Skriv in något i sökfältet först!");
+                return;
+            }
+
+            // Kontrollera om sökningen innehåller något olämpligt
+            const containsBlocked = blockedKeywords.some(keyword => query.toLowerCase().includes(keyword));
+
+            resultsBox.style.display = "block";
+
+            if (containsBlocked) {
+                resultTitle.innerHTML = "Sökningen blockeras";
+                resultContent.className = "blocked-message";
+                resultContent.innerText = "Detta sökord har stoppats av Novasearch säkerhetsfilter för att hålla tjänsten trygg.";
+                return;
+            }
+
+            resultContent.className = "";
+
+            if (isAiMode) {
+                resultTitle.innerText = "Nova AI-svar för: " + query;
+                resultContent.innerText = "Genererar säkert AI-svar... (Här kopplas din AI-motor in för att ge ett lämpligt svar).";
+            } else {
+                resultTitle.innerText = "Sökresultat för: " + query;
+                resultContent.innerText = "Visar webbresultat för '" + query + "'. (Här kopplas din sökdatabas/crawler in).";
+            }
+        }
+
+        // Enter-tangent funktion
+        document.getElementById('searchInput').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                executeSearch();
+            }
+        });
+
+        function randomSearch() {
+            const topics = ["Universum", "AI-teknik", "Sveriges historia", "Programmering", "Rymdfart"];
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            document.getElementById('searchInput').value = randomTopic;
+            executeSearch();
+        }
+
+        // IP- och språkavkänning för alla länder
+        async function detectCountryAndApplyLanguage() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+
+                const countryCode = data.country_code;
+                const countryName = data.country_name;
+
+                const footerLocation = document.querySelector('.footer-location');
+                if (footerLocation && countryName) {
+                    footerLocation.innerText = countryName;
+                }
+
+                const lang = translations[countryCode] || translations["default"];
+
+                document.getElementById('searchInput').placeholder = lang.placeholder;
+                const buttons = document.querySelectorAll('.btn');
+                if (buttons.length > 0) {
+                    buttons[0].innerText = lang.searchBtn;
+                    if (buttons[1]) buttons[1].innerText = lang.luckyBtn;
+                }
+                document.getElementById('aiLabelText').innerHTML = `<strong>${lang.aiText}</strong>`;
+                document.getElementById('navBilder').innerText = lang.bilder;
+                document.getElementById('navOm').innerText = lang.om;
+                document.getElementById('navLogin').innerText = lang.login;
+
+            } catch (error) {
+                console.error("Kunde inte läsa IP-plats, använder standard:", error);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', detectCountryAndApplyLanguage);
+    </script>
+</body>
+</html>
