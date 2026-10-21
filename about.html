@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novasearch - Om oss</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #ffffff;
+            color: #202124;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #dfe1e5;
+        }
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .brand-logo span {
+            color: #ea4335;
+        }
+        header a {
+            text-decoration: none;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        .login-btn {
+            background-color: #1a73e8;
+            color: #ffffff !important;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        main {
+            flex: 1;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #202124;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4d5156;
+            margin-bottom: 16px;
+        }
+        .feature-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #1a73e8;
+        }
+        footer {
+            background-color: #f2f2f2;
+            color: #70757a;
+            font-size: 14px;
+            padding: 16px 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="brand-logo">Nova<span>search</span></a>
+        <div>
+            <a href="index.html" style="margin-right: 16px;">Sök</a>
+            <a href="bilder.html" style="margin-right: 16px;">Bilder</a>
+            <a href="login.html" class="login-btn">Logga in</a>
+        </div>
+    </header>
+
+    <main>
+        <h1>Om Novasearch</h1>
+        <p>Novasearch är en modern, snabb och säker sökmotor utformad för att ge dig rätt svar på ett tryggt sätt.</p>
+        
+        <div class="feature-card">
+            <h3>🤖 Inbyggd Nova AI</h3>
+            <p>Välj AI-läget för att få intelligenta och sammanfattade svar direkt i sökrutan.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>🛡️ Säkerhetsfilter</h3>
+            <p>Vårt avancerade innehållsfilter blockerar automatiskt olämpligt innehåll som våld, vapen och droger.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>🌍 Global Språk- & IP-avkänning</h3>
+            <p>Novasearch identifierar automatiskt ditt land via IP och anpassar gränssnittet efter ditt språk var i världen du än befinner dig.</p>
+        </div>
+    </main>
+
+    <footer>
+        &copy; Novasearch. Alla rättigheter förbehållna.
+    </footer>
+
+</body>
+</html>
